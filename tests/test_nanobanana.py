@@ -44,6 +44,7 @@ def test_generate_posts_json_and_decodes_every_image(calls):
     request = calls[0]
     assert request.full_url == "https://argolink.io/v1/images/generations"
     assert request.get_header("Authorization") == "Bearer k"
+    assert request.get_header("User-agent") == "nanobanana-python/1.0"   # never the blocked Python-urllib default
     assert json.loads(request.data) == {
         "model": "nano-banana-pro", "prompt": "a teapot", "n": 2, "aspect_ratio": "16:9", "resolution": "4k"}
     assert images == [JPEG, JPEG]

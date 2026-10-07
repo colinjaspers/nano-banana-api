@@ -21,6 +21,8 @@ import uuid
 
 DEFAULT_BASE_URL = "https://argolink.io/v1"
 DEFAULT_MODEL = "nano-banana-2"
+# Some CDNs reject the default "Python-urllib" agent outright (HTTP 403), so name the client.
+USER_AGENT = "nanobanana-python/1.0"
 
 TEN_RATIOS = ("1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "5:4", "4:5", "21:9")
 
@@ -103,6 +105,7 @@ class NanoBanana:
     def _send(self, path: str, data: bytes, content_type: str) -> list:
         request = urllib.request.Request(self.base_url + path, data=data, method="POST")
         request.add_header("Authorization", f"Bearer {self.api_key}")
+        request.add_header("User-Agent", USER_AGENT)
         request.add_header("Content-Type", content_type)
         try:
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
